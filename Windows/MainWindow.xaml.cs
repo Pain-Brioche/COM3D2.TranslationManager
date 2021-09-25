@@ -352,10 +352,5 @@ namespace Translation_Manager
             shareWindow.Show();
         }
         #endregion
-
-        private void fix_database_Click(object sender, RoutedEventArgs e)
-        {
-            TempTools.Add_HashValue();
-        }
     }
 }

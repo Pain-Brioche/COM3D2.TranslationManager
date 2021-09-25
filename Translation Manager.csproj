@@ -99,7 +99,6 @@
     <Compile Include="Data\Export.cs" />
     <Compile Include="Data\Import.cs" />
     <Compile Include="Tools\Log.cs" />
-    <Compile Include="Tools\TempTools.cs" />
     <Compile Include="Tools\Tools.cs" />
     <Compile Include="Data\DatabaseManager.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
