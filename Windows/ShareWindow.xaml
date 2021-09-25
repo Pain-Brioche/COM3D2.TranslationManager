@@ -1,0 +1,72 @@
+﻿<Window x:Class="Translation_Manager.ShareWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Translation_Manager"
+        mc:Ignorable="d"
+        Title="Sharing Options" Height="290" Width="250" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Border Padding="7" Background="#eee">
+        <StackPanel>
+            <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4">
+                <StackPanel>
+                    <TextBlock Text="Share your Database" FontWeight="Bold"/>
+                    <Grid Margin="0 5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <CheckBox Grid.Row="0" Grid.Column="0" Content="Japanese" IsChecked="True" IsEnabled="False" ToolTip="Japanese will always be included"/>
+                        <CheckBox Grid.Row="0" Grid.Column="1" Content="Official" IsChecked="False" IsEnabled="False" ToolTip="Official will never be exported, for obvious reasons."/>
+                        <CheckBox Grid.Row="1" Grid.Column="0" x:Name="ExportDeepLCheckbox" Content="DeepL" IsChecked="True"/>
+                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="ExportGoogleCheckbox" Content="Google" IsChecked="True"/>
+                    </Grid>
+                    <Button x:Name="ExportDatabaseButton" Click="ExportDatabaseButton_Click" Content="Export"/>
+                </StackPanel>
+            </Border>
+            <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4" Margin="0 5 0 0">
+                <StackPanel>
+                    <TextBlock Text="Import from another Database" FontWeight="Bold"/>
+                    <Grid Margin="0 5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="ImportDatabaseTextBox" />
+                        <Button x:Name="ImportDatabaseBrowseButton" Click="ImportDatabaseBrowseButton_Click"  Grid.Column="1" Content="..." FontWeight="Bold" Margin="5 0 0 0"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <CheckBox Grid.Row="0" Grid.Column="0" x:Name="ImportJapaneseCheckbox" Content="Japanese" IsChecked="True" ToolTip="If selected, sentences you do not have will be added to your database."/>
+                        <CheckBox Grid.Row="1" Grid.Column="0" x:Name="ImportDeepLCheckbox" Content="DeepL" IsChecked="True"/>
+                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="ImportGoogleCheckbox" Content="Google" IsChecked="True"/>
+                    </Grid>
+                    <Grid Margin="0 5 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" x:Name="ImportOverwriteCheckbox" Content="Overwrite" VerticalAlignment="Center" ToolTip="Will overwrite values you may already have. Empty translation will never overwrite yours."/>
+                        <Button Grid.Column="1" x:Name="ImportDatabaseButton" Content="Import" Click="ImportDatabaseButton_Click"/>
+                        
+                    </Grid>
+                    
+                </StackPanel>
+            </Border>
+            <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4" Margin="0 5 0 0">
+                <ProgressBar x:Name="ImportDatabaseProgressBar" Height="16"/>
+            </Border>
+        </StackPanel>
+    </Border>
+</Window>

@@ -1,0 +1,349 @@
+﻿<Window x:Class="Translation_Manager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Translation_Manager"
+        Loaded="Window_Loaded"
+        mc:Ignorable="d"
+        Title="COM3D2 Translation Manager" Height="550" Width="900" MinWidth="660" MinHeight="450">
+    <!-- External boder-->
+    <DockPanel>
+        <StatusBar x:Name="MainStatusBar" DockPanel.Dock="Bottom"  BorderThickness="0 1 0 0" BorderBrush="Gray">
+            <DockPanel x:Name="StatusBarDockPanel" LastChildFill="True" Width="{Binding ElementName=MainStatusBar, Path=ActualWidth}">
+                <TextBlock DockPanel.Dock="Left">
+                    <Run Text="Total Lines: "/>
+                    <Run Text="{Binding TotalLines}"/>
+                    <Run Text="Translated: "/>
+                    <Run Text="{Binding TotalTranslated}"/>
+                    <Run Text=" (Off: "/>
+                    <Run Text="{Binding Official}"/>
+                    <Run Text=" DpL: "/>
+                    <Run Text="{Binding DeepL}"/>
+                    <Run Text=" Ggl: "/>
+                    <Run Text="{Binding Google}"/>
+                    <Run Text=") Remaining:"/>
+                    <Run Text="{Binding Remaining}"/>
+                </TextBlock>
+                <ProgressBar x:Name="StatusBarProgressBar" DockPanel.Dock="Right" Width="180" Height="16" BorderThickness="1" Margin="0 0 10 0"/>
+                <TextBlock/>
+            </DockPanel>
+        </StatusBar>
+        
+        <Border Padding="7 7 7 0" Background="#eee">
+            <Grid MinWidth="600" >
+                <!--Three Columns the one in the middle acting as a margin-->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="350" MaxWidth="350"/>
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Block -->
+                <!--Stackpanels automaticaly place elements on top of each others-->
+                <StackPanel Grid.Column="0">
+                    <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4">
+                        <StackPanel>
+
+                            <!-- Start of Import Script block-->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Import Scripts" FontWeight="Bold" Margin=" 0 0 0 5"/>
+                                <TextBlock Cursor="Help" Text="?" Width="25 " TextAlignment="Center" FontWeight="DemiBold" TextDecorations="Underline">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock TextAlignment="Justify">
+                                        Import Scripts in your Translation Database.
+                                        <LineBreak/>
+                                        Scripts must come from any i18nEx compatible source.
+                                        <LineBreak/>
+                                        Type selected will determine what kind of translation this will be.
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <TextBlock Text="Script to import folder path"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox x:Name="ImportScriptPathTextBox" Grid.Column="0" Margin="0 1 5 5"/>
+                                <Button x:Name="ImportScriptBrowseButton" Click="ImportScriptBrowseButton_Click"  Grid.Column="1" Content="..." FontWeight="Bold" Margin="0 2 0 5"/>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox x:Name="ImportScriptComboBox" Grid.Column="0" Margin="0 0 0 4">
+                                    <ComboBoxItem IsSelected="True" Content="Script Type"/>
+                                    <ComboBoxItem Content="Japanese"/>
+                                    <ComboBoxItem Content="Official"/>
+                                    <ComboBoxItem Content="DeepL"/>
+                                    <ComboBoxItem Content="Google"/>
+                                </ComboBox>
+                                <Button Grid.Column="1" x:Name="ImportScriptImportButton" Click="ImportScriptButton_Click" Content="Import" IsEnabled="{Binding CanClick}" Margin="5 0 0 4"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+
+                    <!-- Start of CVS block-->
+                    <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4" Margin="0 4 0 0">
+                        <StackPanel>
+                            <!-- Export -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Export for Translation" FontWeight="Bold" Margin=" 0 0 0 5"/>
+                                <TextBlock Cursor="Help" Text="?" Width="25 " TextAlignment="Center" FontWeight="DemiBold" TextDecorations="Underline">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock TextAlignment="Justify">
+                                        Export untranslated lines as an easily usable format to use in Google or DeepL
+                                        <LineBreak/>
+                                        If a line has an official translation, it will never be included!
+                                        <LineBreak/>
+                                        DeepL export will consider Google lines as untranslated.
+                                        <LineBreak/>
+                                        <LineBreak/>
+                                        CSV for Google: export one file to load in Google Sheet.
+                                        <LineBreak/>
+                                        <LineBreak/>
+                                        TXT for DeepL: export as .txt to translate with DeepL 
+                                        <LineBreak/>
+                                        Given DeepL is limiting free translation to 5000 characters, you can split in any file required.
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox x:Name="ExportCsvComboBox" Grid.Column="0">
+                                    <ComboBoxItem Content="Export As" IsSelected="True"/>
+                                    <ComboBoxItem Content="CSV For GoogleSheet" />
+                                    <ComboBoxItem Content="TXT for DeepL" x:Name="DeepLMode"/>
+                                </ComboBox>
+                                <Button x:Name="ExportCsvExportButton" IsEnabled="{Binding CanClick}" Click="ExportCsvExportButton_Click" Grid.Column="1" Content="Export" Margin="5 0 0 0"/>
+                            </Grid>
+                            <Grid IsEnabled="{Binding ElementName=DeepLMode, Path=IsSelected}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="108"/>
+                                </Grid.ColumnDefinitions>
+
+                                <CheckBox x:Name="EnableSplitCheckBox" Grid.Column="0" Content="Enable Split" Margin="0 5 0 0"/>
+                                <TextBlock Grid.Column="1" Text="Maximum Characters" HorizontalAlignment="Right" Margin="10 5 6 0"/>
+                                <TextBox x:Name="EnableSplitTextBox" Grid.Column="2" HorizontalContentAlignment="Right" Text="5000" Margin="0 5 0 0"/>
+
+                            </Grid>
+
+                            <!-- Import -->
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Import translation files" FontWeight="Bold" Margin=" 0 0 0 5"/>
+                                <TextBlock Cursor="Help" Text="?" Width="25 " TextAlignment="Center" FontWeight="DemiBold" TextDecorations="Underline">
+                                    <TextBlock.ToolTip>
+                                        <TextBlock TextAlignment="Justify">
+                                        Import Translated files made from the tool above.
+                                        <LineBreak/>
+                                        <LineBreak/>
+                                        Google: Save the file from Google Sheet as .csv and import it here.
+                                        <LineBreak/>
+                                        <LineBreak/>
+                                        DeepL: load all translated files from DeepL
+                                        </TextBlock>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <TextBlock Text="Translation folder path"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox x:Name="ImportCsvTextBox" Grid.Column="0" Margin="0 1 5 5"/>
+                                <Button x:Name="ImportCsvBrowseButton" Click="ImportCsvBrowseButton_Click" Grid.Column="1" Content="..." FontWeight="Bold" Margin="0 2 0 5"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox x:Name="ImportCsvComboBox" Grid.Column="0" Margin="0 0 0 4">
+                                    <ComboBoxItem IsSelected="True" Content="Import As"/>
+                                    <ComboBoxItem Content="GoogleSheet CSV"/>
+                                    <ComboBoxItem Content="DeepL TXT"/>
+                                </ComboBox>
+                                <Button x:Name="ImportCsvImportButton" IsEnabled="{Binding CanClick}" Click="ImportCsvImportButton_Click" Grid.Column="1" Content="Import" Margin="5 0 0 4"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4" Margin="0 4 0 0">
+                        <StackPanel>
+                            <TextBlock Text="Export to COM3D2" FontWeight="Bold" Margin=" 0 0 0 5"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox x:Name="ExportToGameComboBox" Grid.Column="0" Margin="0 0 0 4">
+                                    <ComboBoxItem IsSelected="True" Content="i18nEx"/>
+                                    <ComboBoxItem Content="XUAT"/>
+                                </ComboBox>
+                                <Button x:Name="ExportToGameButton" IsEnabled="{Binding CanClick}" Click="ExportToGameButton_Click" Grid.Column="1" Content="Export" Margin="5 0 0 4"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4" Margin="0 4 0 0">
+                        <StackPanel>
+                            <TextBlock Text="Database Options" FontWeight="Bold" Margin=" 0 0 0 5"/>
+                            <WrapPanel>
+                                <CheckBox x:Name="AutoSaveCheckBox" Content="Auto Save" Width="86" VerticalContentAlignment="Center" Click="AutoSaveCheckBox_Click"/>
+                                <Button x:Name="DatabaseSaveButton" IsEnabled="{Binding CanClick}" Content="Save" Width="80" Margin="0 0 2 0" Click="DatabaseSaveButton_Click">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="LightGreen"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsSaved}"
+                                                                 Value="False">
+                                                    <Setter Property="Background" Value="LightPink"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                                <Button x:Name="DatabaseBackupButton" IsEnabled="{Binding CanClick}" Content="Backup" Width="80" Margin="2 0" Click="DatabaseBackupButton_Click"/>
+                                <Button x:Name="DatabaseShareButton" IsEnabled="{Binding CanClick}" Content="Share" Width="80" Margin="2 0" Click="DatabaseShareButton_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4" Margin="0 4 0 0">
+                        <StackPanel>
+                            <TextBlock Text="Various Tools" FontWeight="Bold" Margin=" 0 0 0 5"/>
+                            <WrapPanel>
+                                <Button x:Name="RefreshDatabaseStatsButton" IsEnabled="{Binding CanClick}" Content="Refresh Stats" Width="80" Margin="2 0" Click="UpdateStatsButton_Click"/>
+                                <Button x:Name="ClearLogButton" Content="Clear Log" Width="80" Margin="2 0" Click="ClearLogButton_Click"/>
+                                <!--<Button x:Name="fix_database" Content="Add Hashvalue" Width="80" Margin="2 0" Click="fix_database_Click"/>-->
+                                <Button x:Name="SortScriptFilesButton" Content="Sort Scripts" Width="80" Margin="2 0" Click="SortScriptFilesButton_Click"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+
+                <!-- Right Block-->
+                <Border Grid.Column="2" Background="White" BorderBrush="#DDD" BorderThickness="2" Margin="0 0 0 2">
+                    <!-- Start of Right panel config block -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="21"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Margin="5 3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton Grid.Column="0" x:Name="RadioButtonLog" IsChecked="True" GroupName="RightPanelMode" Content="Log" Click="RadioButtonLog_Click"/>
+                            <RadioButton Grid.Column="1" GroupName="RightPanelMode" Content="Database" Click="RadioButtonDatabase_Click" />
+                        </Grid>
+                        <Border Grid.Row="1" Grid.Column="2" BorderBrush="#DDD" BorderThickness="2"/>
+                        <Grid Grid.Row="3" x:Name="RightPanelGrid">
+                            
+                            <!-- Log Display-->
+                            <ListView x:Name="RightPanelLog" Visibility="Visible" MaxHeight="{Binding ElementName=RightPanelGrid, Path=ActualHeight}" BorderThickness="0">
+                            </ListView>
+                            
+                            <!-- Database Display-->
+
+                            <StackPanel x:Name="RightPanelDatabase" Visibility="Hidden">
+                                <Grid VerticalAlignment="Center" Height="22">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="300"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox Grid.Column="0" x:Name="OfficialCheckBox" Click="OfficialCheckBox_Click" Margin="3" Content="Official" IsChecked="False"/>
+                                    <CheckBox Grid.Column="1" x:Name="DeepLCheckBox" Click="DeepLCheckBox_Click" Margin="3" Content="DeepL" IsChecked="True"/>
+                                    <CheckBox Grid.Column="2" x:Name="GoogleCheckBox" Click="GoogleCheckBox_Click" Margin="3" Content="Google" IsChecked="True"/>
+
+                                    <TextBox Grid.Column="4" x:Name="SearchTextBox" BorderThickness="1" Text="" KeyDown="SearchTextBox_KeyDown"/>
+                                    <ComboBox Grid.Column="5" x:Name="SearchComboBox" Margin="2 0">
+                                        <ComboBoxItem Content="In DeepL" IsSelected="True"/>
+                                        <ComboBoxItem Content="In Official"/>
+                                        <ComboBoxItem Content="In Google"/>
+                                        <ComboBoxItem Content="In Japanese"/>
+                                        <ComboBoxItem Content="Suspicious Translations DeepL"/>
+                                        <ComboBoxItem Content="Suspicious Translations Google"/>
+                                    </ComboBox>                                    
+                                    
+                                    <Button Grid.Column="6" x:Name="SearchButton" IsEnabled="{Binding CanClick}" Click="SearchButton_Click" Content="Search"/>
+                                    <Button Grid.Column="6" x:Name="CancelButton" Visibility="Hidden" Click="CancelButton_Click" Content="Cancel"/>
+                                </Grid>
+
+                                <ListView  x:Name="RightPanelListView" MaxHeight="{Binding ElementName=RightPanelGrid, Path=ActualHeight}" BorderThickness="0" Background="#eee">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn x:Name="JapaneseHeader" Header="Japanese" Width="550">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBox Width="{Binding ElementName=JapaneseHeader, Path=ActualWidth}" Text="{Binding Japanese}" Height="26" VerticalContentAlignment="Center" FontSize="16" IsReadOnly="True" BorderThickness="0" Margin="-6 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Name="OfficialColumn" Width="0">
+                                                <GridViewColumnHeader x:Name="OfficialHeader" Content="Official" IsEnabled="False"/>
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBox Width="{Binding ElementName=OfficialHeader, Path=ActualWidth}" Text="{Binding Official, Mode=TwoWay}" Height="26" VerticalContentAlignment="Center" FontSize="15" BorderThickness="1 0 0 0" Margin="-6 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Name="DeepLColumn" Width="460">
+                                                <GridViewColumnHeader x:Name="DeepLHeader" Content="DeepL" IsEnabled="True"/>
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBox Width="{Binding ElementName=DeepLHeader, Path=ActualWidth}" Text="{Binding Deepl, Mode=TwoWay}" Height="26" VerticalContentAlignment="Center" BorderThickness="1 0 0 0" FontSize="15" Margin="-6 0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Name="GoogleColumn" Width="460">
+                                                <GridViewColumnHeader x:Name="GoogleHeader" Content="Google" IsEnabled="True"/>
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0">
+                                                            <TextBox Width="{Binding ElementName=GoogleHeader, Path=ActualWidth}" Text="{Binding Google, Mode=TwoWay}" Height="26" VerticalContentAlignment="Center" BorderThickness="1 0 0 0" FontSize="15" Margin="-6 0"/>
+                                                        </Border>                                                        
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </DockPanel>
+</Window>
