@@ -286,19 +286,10 @@ namespace Translation_Manager
 
             if (SearchComboBox.Text == "Suspicious Translations DeepL")
             {
-                OfficialCheckBox.IsChecked = false;
-                DeepLCheckBox.IsChecked = true;
-                GoogleCheckBox.IsChecked = false;
-
                 await Search.Suspicious(true, progress, cancelSearch.Token);
-
             }
             else if (SearchComboBox.Text == "Suspicious Translations Google")
             {
-                OfficialCheckBox.IsChecked = false;
-                DeepLCheckBox.IsChecked = false;
-                GoogleCheckBox.IsChecked = true;
-
                 await Search.Suspicious(true, progress, cancelSearch.Token);
             }
             else
