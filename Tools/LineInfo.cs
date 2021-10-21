@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 
 namespace Translation_Manager
-{    public class LineInfos
+{
+    public class LineInfos
     {
         public string HashValue { get; set; }
         public string Japanese { get; set; }

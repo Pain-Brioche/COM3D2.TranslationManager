@@ -112,7 +112,7 @@ namespace Translation_Manager
                 // Returns an array of all lines in the file.
                 string[] lineList = File.ReadAllLines(file);
 
-                foreach (string line in lineList) 
+                foreach (string line in lineList)
                 {
                     // Googlesheet will save strings with commas inside doublequotes ""
                     // replacing them with |

@@ -78,6 +78,12 @@
     </ApplicationDefinition>
     <Compile Include="Data\Search.cs" />
     <Compile Include="Data\ShareDatabase.cs" />
+    <Compile Include="Windows\DeleteListWindow.xaml.cs">
+      <DependentUpon>DeleteListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ReplaceWindow.xaml.cs">
+      <DependentUpon>ReplaceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ShareWindow.xaml.cs">
       <DependentUpon>ShareWindow.xaml</DependentUpon>
     </Compile>
@@ -88,6 +94,10 @@
     <Compile Include="Tools\LineInfo.cs" />
     <Compile Include="Tools\SortScripts.cs" />
     <Compile Include="Tools\StatusBar.cs" />
+    <Page Include="Windows\DeleteListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,6 +115,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\ReplaceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\ShareWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

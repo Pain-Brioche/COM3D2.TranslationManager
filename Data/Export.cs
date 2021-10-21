@@ -30,7 +30,7 @@ namespace Translation_Manager
             foreach (KeyValuePair<string, LineInfos> entry in TranslationDatabase.database)
             {
                 // Check if there is no translations already available
-                if (entry.Value.Official == "" && entry.Value.Deepl == "" && entry.Value.Google == "")
+                if (string.IsNullOrEmpty(entry.Value.Official) && string.IsNullOrEmpty(entry.Value.Deepl) && string.IsNullOrEmpty(entry.Value.Google))
                 {
                     lineCount += 1;
                     //Adds the translation instruction for google sheet inside the csv

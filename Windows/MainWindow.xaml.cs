@@ -1,12 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
 using System.Windows;
 using System.Collections.ObjectModel;
-using System.Configuration;
 using WinForm = System.Windows.Forms;
-using System.Windows.Controls;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 // using Microsoft.Win32;
@@ -54,7 +49,9 @@ namespace Translation_Manager
             DatabaseBackupButton.DataContext =
             DatabaseShareButton.DataContext =
             RefreshDatabaseStatsButton.DataContext =
-            SearchButton.DataContext = canClickUI;
+            SearchButton.DataContext =
+            DeleteListButton.DataContext =
+            ReplaceStringButton.DataContext = canClickUI;
         }
 
         // executed when the UI is fully loaded (async)
@@ -290,7 +287,7 @@ namespace Translation_Manager
             }
             else if (SearchComboBox.Text == "Suspicious Translations Google")
             {
-                await Search.Suspicious(true, progress, cancelSearch.Token);
+                await Search.Suspicious(false, progress, cancelSearch.Token);
             }
             else
             {
@@ -350,6 +347,19 @@ namespace Translation_Manager
             ShareWindow shareWindow = new ShareWindow();
             shareWindow.Owner = this;
             shareWindow.Show();
+        }
+        private void DeleteListButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteListWindow deleteListWindow = new DeleteListWindow();
+            deleteListWindow.Owner = this;
+            deleteListWindow.Show();
+        }
+
+        private void ReplaceStringButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReplaceWindow replaceWindow = new ReplaceWindow();
+            replaceWindow.Owner = this;
+            replaceWindow.Show();
         }
         #endregion
     }

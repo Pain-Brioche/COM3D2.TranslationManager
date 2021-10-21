@@ -27,8 +27,6 @@ namespace Translation_Manager
 
                 _isSaved = value;
 
-                //Log.Write("IsSaved changed");
-
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(IsSaved)));
             }
         }

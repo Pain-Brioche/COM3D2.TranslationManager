@@ -88,7 +88,7 @@ namespace Translation_Manager
             {
                 foreach (KeyValuePair<string, LineInfos> keyValue in TranslationDatabase.database)
                 {
-                    if (keyValue.Value.Official.Contains(searchedText))
+                    if (keyValue.Value.Official.ToLower().Contains(searchedText.ToLower()))
                     {
                         LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
 
@@ -120,7 +120,7 @@ namespace Translation_Manager
             {
                 foreach (KeyValuePair<string, LineInfos> keyValue in TranslationDatabase.database)
                 {
-                    if (keyValue.Value.Deepl.Contains(searchedText))
+                    if (keyValue.Value.Deepl.ToLower().Contains(searchedText.ToLower()))
                     {
                         LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
 
@@ -152,7 +152,7 @@ namespace Translation_Manager
             {
                 foreach (KeyValuePair<string, LineInfos> keyValue in TranslationDatabase.database)
                 {
-                    if (keyValue.Value.Google.Contains(searchedText))
+                    if (keyValue.Value.Google.ToLower().Contains(searchedText.ToLower()))
                     {
                         LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
 
@@ -215,7 +215,7 @@ namespace Translation_Manager
             // remove commented lines.
             foreach (string item in suspiciousArray)
             {
-                if (!item.StartsWith("//")) { suspiciousList.Add(item); }
+                if (!item.StartsWith("//")) { suspiciousList.Add(item.Replace("\n", "")); }
             }
 
             // Look for them in the dabatase.
@@ -264,6 +264,90 @@ namespace Translation_Manager
             Log.Write(suspiciousCount + " suspicious translations found");
         }
 
+        #endregion
+
+        #region Delete Displayed Entries
+        internal static void Delete(bool official, bool deepl, bool google, IProgress<int> progress)
+        {
+            // Progress bar implementation.
+            int maxCount = MainWindow.DatabaseList.Count();
+            int count = 0;
+            int lastpercent = 0;
+            progress.Report(count);
+
+
+
+            foreach (LineInfosUpdate line in MainWindow.DatabaseList)
+            {
+                if (official) { line.Official = ""; }
+                if (deepl) { line.Deepl = ""; }
+                if (google) { line.Google = ""; }
+
+                // Progress bar implementation.
+                count += 1;
+
+                int percentProgression = count * 100 / maxCount;
+                if (percentProgression >= lastpercent + 1)
+                {
+                    progress.Report(percentProgression);
+                    lastpercent = percentProgression;
+                }
+            }
+        }
+        #endregion
+
+        #region Replace string
+        internal static async Task Replace(bool official, bool deepl, bool google, string oldStr, string newStr, IProgress<int> progress)
+        {
+            // Progress bar implementation.
+            int maxCount = MainWindow.DatabaseList.Count();
+            int count = 0;
+            int lastpercent = 0;
+            progress.Report(count);
+
+            int replaceCount = 0;
+
+            foreach (KeyValuePair<string, LineInfos> keyValuePair in TranslationDatabase.database)
+            {
+                if (official)
+                {
+                    if (keyValuePair.Value.Official.ToLower().Contains(oldStr.ToLower()))
+                    {
+                        keyValuePair.Value.Official = keyValuePair.Value.Official.Replace(oldStr, newStr);
+                        replaceCount += 1;
+                    }
+                }
+                if (deepl)
+                {
+                    if (keyValuePair.Value.Deepl.ToLower().Contains(oldStr.ToLower()))
+                    {
+                        keyValuePair.Value.Deepl = keyValuePair.Value.Deepl.Replace(oldStr, newStr);
+                        replaceCount += 1;
+                    }
+                }
+                if (google)
+                {
+                    if (keyValuePair.Value.Google.ToLower().Contains(oldStr.ToLower()))
+                    {
+                        keyValuePair.Value.Google = keyValuePair.Value.Google.Replace(oldStr, newStr);
+                        replaceCount += 1;
+                    }
+                }
+
+                // Progress bar implementation.
+                count += 1;
+
+                int percentProgression = count * 100 / maxCount;
+                if (percentProgression >= lastpercent + 1)
+                {
+                    progress.Report(percentProgression);
+                    lastpercent = percentProgression;
+                }
+            }
+            MainWindow.canClickUI.IsSaved = false;
+
+            Log.Write($"Replaced [{oldStr}] with [{newStr}], {replaceCount} times.");
+        }
         #endregion
 
         private static LineInfosUpdate GetLineInfosUpdate(LineInfos lineInfos)

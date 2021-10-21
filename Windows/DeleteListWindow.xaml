@@ -1,0 +1,30 @@
+﻿<Window x:Class="Translation_Manager.DeleteListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Translation_Manager"
+        mc:Ignorable="d"
+        Title="Delete Entries" Height="226" Width="250" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Border Padding="7" Background="#eee">
+        <StackPanel>
+            <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4">
+                <StackPanel Background="White">
+                    <TextBlock Text="This will Delete the selected entries for EVERY lines currently in display in the right panel!" TextWrapping="Wrap" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Red" TextAlignment="Justify"/>
+                </StackPanel>
+            </Border>
+            <Border Background="White" BorderBrush="#DDD" BorderThickness="2" Padding="4" Margin="0 4 0 0">
+                <StackPanel>
+                    <CheckBox x:Name="DeleteOfficialEntriesCheckBox" Content="Official"/>
+                    <CheckBox x:Name="DeleteDeeplEntriesCheckBox" Content="DeepL"/>
+                    <CheckBox x:Name="DeleteGoogleEntriesCheckBox" Content="Google"/>
+
+                    <Button x:Name="DeleteEntriesOKButton" Content="Delete" Margin="0 5 0 0" Background="#ED7070" Foreground="WhiteSmoke" Click="DeleteEntriesOKButton_Click"/>
+
+                    <ProgressBar x:Name="DeleteEntriesProgressBar" Height="20" Margin="0 4 0 0"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Border>
+
+</Window>
