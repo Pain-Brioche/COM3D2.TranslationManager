@@ -51,19 +51,25 @@ namespace Translation_Manager
             int lastpercent = 0;
             progress.Report(count);
 
+            int foundCount = 0;
+
 
             if (mode == TlTypes.Japanese)
             {
                 foreach (KeyValuePair<string, LineInfos> keyValue in TranslationDatabase.database)
                 {
-                    if (keyValue.Value.Japanese.Contains(searchedText))
+                    if (!string.IsNullOrEmpty(keyValue.Value.Japanese)) 
                     {
-                        LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                        if (keyValue.Value.Japanese.Contains(searchedText))
+                        {
+                            LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                            foundCount += 1;
 
-                        await Task.Run(() =>
-                        App.Current.Dispatcher.Invoke(() => {
-                            MainWindow.DatabaseList.Add(lineInfosUpdate);
-                        }));
+                            await Task.Run(() =>
+                            App.Current.Dispatcher.Invoke(() => {
+                                MainWindow.DatabaseList.Add(lineInfosUpdate);
+                            }));
+                        }
                     }
 
                     // Progress bar implementation.
@@ -83,19 +89,24 @@ namespace Translation_Manager
                         break;
                     }
                 }
+                Log.Write($"{foundCount} occurences of \"{searchedText}\" found.");
             }
             else if ( mode == TlTypes.Official)
             {
                 foreach (KeyValuePair<string, LineInfos> keyValue in TranslationDatabase.database)
                 {
-                    if (keyValue.Value.Official.ToLower().Contains(searchedText.ToLower()))
+                    if (!string.IsNullOrEmpty(keyValue.Value.Official))
                     {
-                        LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                        if (keyValue.Value.Official.ToLower().Contains(searchedText.ToLower()))
+                        {
+                            LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                            foundCount += 1;
 
-                        await Task.Run(() =>
-                        App.Current.Dispatcher.Invoke(() => {
-                            MainWindow.DatabaseList.Add(lineInfosUpdate);
-                        }));
+                            await Task.Run(() =>
+                            App.Current.Dispatcher.Invoke(() => {
+                                MainWindow.DatabaseList.Add(lineInfosUpdate);
+                            }));
+                        }
                     }
 
                     // Progress bar implementation.
@@ -115,19 +126,24 @@ namespace Translation_Manager
                         break;
                     }
                 }
+                Log.Write($"{foundCount} occurences of \"{searchedText}\" found.");
             }
             else if (mode == TlTypes.DeepL)
             {
                 foreach (KeyValuePair<string, LineInfos> keyValue in TranslationDatabase.database)
                 {
-                    if (keyValue.Value.Deepl.ToLower().Contains(searchedText.ToLower()))
+                    if (!string.IsNullOrEmpty(keyValue.Value.Deepl))
                     {
-                        LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                        if (keyValue.Value.Deepl.ToLower().Contains(searchedText.ToLower()))
+                        {
+                            LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                            foundCount += 1;
 
-                        await Task.Run(() =>
-                        App.Current.Dispatcher.Invoke(() => {
-                            MainWindow.DatabaseList.Add(lineInfosUpdate);
-                        }));
+                            await Task.Run(() =>
+                            App.Current.Dispatcher.Invoke(() => {
+                                MainWindow.DatabaseList.Add(lineInfosUpdate);
+                            }));
+                        }
                     }
 
                     // Progress bar implementation.
@@ -147,19 +163,24 @@ namespace Translation_Manager
                         break;
                     }
                 }
+                Log.Write($"{foundCount} occurences of \"{searchedText}\" found.");
             }
             else if (mode == TlTypes.Google)
             {
                 foreach (KeyValuePair<string, LineInfos> keyValue in TranslationDatabase.database)
                 {
-                    if (keyValue.Value.Google.ToLower().Contains(searchedText.ToLower()))
+                    if (!string.IsNullOrEmpty(keyValue.Value.Google))
                     {
-                        LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                        if (keyValue.Value.Google.ToLower().Contains(searchedText.ToLower()))
+                        {
+                            LineInfosUpdate lineInfosUpdate = GetLineInfosUpdate(keyValue.Value);
+                            foundCount += 1;
 
-                        await Task.Run(() =>
-                        App.Current.Dispatcher.Invoke(() => {
-                            MainWindow.DatabaseList.Add(lineInfosUpdate);
-                        }));
+                            await Task.Run(() =>
+                            App.Current.Dispatcher.Invoke(() => {
+                                MainWindow.DatabaseList.Add(lineInfosUpdate);
+                            }));
+                        }
                     }
 
                     // Progress bar implementation.
@@ -179,6 +200,7 @@ namespace Translation_Manager
                         break;
                     }
                 }
+                Log.Write($"{foundCount} occurences of \"{searchedText}\" found.");
             }
         }
         #endregion
