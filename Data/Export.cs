@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace Translation_Manager
 {
@@ -141,16 +142,20 @@ namespace Translation_Manager
                 string bestTranslation;
 
                 // choose the best translation Official > DeepL > Google
-                if (keyValue.Value.Official != "") { bestTranslation = keyValue.Value.Official; }
-                else if (keyValue.Value.Deepl != "") { bestTranslation = keyValue.Value.Deepl; }
-                else { bestTranslation = keyValue.Value.Google; }
+                if (!string.IsNullOrEmpty(keyValue.Value.Official)) { bestTranslation = keyValue.Value.Official; }
+                else if (!string.IsNullOrEmpty(keyValue.Value.Deepl)) { bestTranslation = keyValue.Value.Deepl; }
+                else if (!string.IsNullOrEmpty(keyValue.Value.Google)) { bestTranslation = keyValue.Value.Google; }
+                else { bestTranslation = ""; }
 
                 lineCount += 1;
 
                 // make a i18nEx compatible string and add it to i18Dict
                 string endString = keyValue.Value.Japanese + "\t" + bestTranslation;
 
-                foreach (string file in keyValue.Value.InFile)
+                // remove .txt in duplicates
+                var noDupes = keyValue.Value.InFile.Distinct().ToList();
+
+                foreach (string file in noDupes)
                 {
                     if (!i18Dict.ContainsKey(file))
                     {
