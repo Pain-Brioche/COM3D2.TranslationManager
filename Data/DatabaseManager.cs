@@ -79,19 +79,19 @@ namespace Translation_Manager
         {
             if (database.ContainsKey(key))
             {
-                if (database[key].Japanese == "" && lineInfos.Japanese != null)
+                if (string.IsNullOrEmpty(database[key].Japanese) && !string.IsNullOrEmpty(lineInfos.Japanese))
                 {
                     database[key].Japanese = lineInfos.Japanese;
                 }
-                if (database[key].Official == "" && lineInfos.Official != null)
+                if (string.IsNullOrEmpty(database[key].Official) && !string.IsNullOrEmpty(lineInfos.Official))
                 {
                     database[key].Official = lineInfos.Official;
                 }
-                if (database[key].Deepl == "" && lineInfos.Deepl != null)
+                if (string.IsNullOrEmpty(database[key].Deepl) && !string.IsNullOrEmpty(lineInfos.Deepl))
                 {
                     database[key].Deepl = lineInfos.Deepl;
                 }
-                if (database[key].Google == "" && lineInfos.Google != null)
+                if (string.IsNullOrEmpty(database[key].Google) && !string.IsNullOrEmpty(lineInfos.Google))
                 {
                     database[key].Google = lineInfos.Google;
                 }
